@@ -5,7 +5,7 @@ import (
 	"flag"
 	"os"
 
-	"github.com/agrocheck/traccar-tester"
+	"github.com/agrocheck/traccar-tester/taip"
 	"github.com/google/subcommands"
 )
 
@@ -13,11 +13,8 @@ func main() {
 	subcommands.Register(subcommands.HelpCommand(), "")
 	subcommands.Register(subcommands.FlagsCommand(), "")
 	subcommands.Register(subcommands.CommandsCommand(), "")
-
-	for _, cmd := range tester.Commands() {
-		// TODO: check group
-		subcommands.Register(cmd, "protocols")
-	}
+	// TODO: check group
+	subcommands.Register(&taip.Command{}, "protocols")
 
 	// TODO: check
 	flag.Parse()
