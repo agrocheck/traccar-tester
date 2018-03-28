@@ -48,6 +48,16 @@ func (cmd *Command) Execute(_ context.Context, _ *flag.FlagSet, _ ...interface{}
 		return subcommands.ExitFailure
 	}
 
+	if len(cmd.event) == 0 {
+		log.Print("event not defined")
+		return subcommands.ExitFailure
+	}
+
+	if len(cmd.event) != 2 {
+		log.Print("event must be a 2-length string")
+		return subcommands.ExitFailure
+	}
+
 	p := NewDevice(cmd.id, cmd.event)
 
 	return tester.Run(p, cmd.count, cmd.backoff)
