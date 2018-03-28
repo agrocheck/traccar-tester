@@ -10,10 +10,9 @@ import (
 )
 
 type Command struct {
-	id string
-	event string
-	count int
-	backoff int
+	traccar tester.Traccar
+	id      string
+	event   string
 }
 
 func (cmd *Command) Name() string {
@@ -29,10 +28,15 @@ func (cmd *Command) Usage() string {
 }
 
 func (cmd *Command) SetFlags(f *flag.FlagSet) {
+	// TODO: move these to tester.go?
+	f.StringVar(&cmd.traccar.Host, "host", "localhost", "TODO")
+	f.StringVar(&cmd.traccar.Port, "port", "5031", "TODO")
+	f.StringVar(&cmd.traccar.Network, "network", "tcp", "TODO")
+	f.IntVar(&cmd.traccar.Count, "count", 1, "TODO")
+	f.IntVar(&cmd.traccar.Backoff, "backoff", 0, "TODO")
+
 	f.StringVar(&cmd.id, "id", "", "TODO")
 	f.StringVar(&cmd.event, "event", "", "TODO")
-	f.IntVar(&cmd.count, "count", 1, "TODO")
-	f.IntVar(&cmd.backoff, "backoff", 0, "TODO")
 }
 
 func (cmd *Command) Execute(_ context.Context, _ *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
@@ -60,5 +64,5 @@ func (cmd *Command) Execute(_ context.Context, _ *flag.FlagSet, _ ...interface{}
 
 	p := NewDevice(cmd.id, cmd.event)
 
-	return tester.Run(p, cmd.count, cmd.backoff)
+	return tester.Run(&cmd.traccar, p)
 }
